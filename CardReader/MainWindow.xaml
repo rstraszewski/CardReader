@@ -1,0 +1,16 @@
+﻿<Window x:Class="CardReader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CardReader"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="719">
+    <Grid>
+        <ComboBox SelectedItem="{Binding Path=CurrentReader}" SelectionChanged="ConnectCard" ItemsSource="{Binding Path=Readers}" x:Name="comboBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="210"/>
+        <Button x:Name="loadReadersButton" Click="LoadReaders" Content="Load Readers" HorizontalAlignment="Left" Margin="225,10,0,0" VerticalAlignment="Top" Width="85" Height="22"/>
+        <Label x:Name="statusLabel" Content="{Binding Path=Status}" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" Margin="555,18,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="listBox" ItemsSource="{Binding Path=Logs}" HorizontalAlignment="Left" Height="100" Margin="10,209,0,0" VerticalAlignment="Top" Width="691"/>
+
+    </Grid>
+</Window>
