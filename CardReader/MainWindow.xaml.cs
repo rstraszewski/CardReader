@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using PCSC;
@@ -43,6 +44,13 @@ namespace CardReader
 
         public MainWindow()
         {
+            // Example of reading sms
+            var msg = new byte[] { 0xD7, 0x27, 0xD3, 0x78, 0x0C, 0x3A, 0x8F, 0xFF };
+            byte[] unpackedBytes = PduBitPacker.UnpackBytes(msg);
+            var decodedMsg = Encoding.UTF8.GetString(unpackedBytes);
+
+            InitializeComponent();
+
             Dispatcher.UnhandledException += LogError;
             DataContext = this;
 
@@ -53,8 +61,6 @@ namespace CardReader
             _sCardContext = new SCardContext();
             _sCardContext.Establish(SCardScope.System);
             _sCardReader = new SCardReader(_sCardContext);
-
-            InitializeComponent();
         }
 
         private void LogError(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -122,12 +128,12 @@ namespace CardReader
 
         private void SendCommand(byte[] command)
         {
-            Log("Sending command: {0}", string.Join(" ", command.Select(x => string.Format("{0:X2} ", x))));
+            Log("Sending command in bytes: {0} in string: {1}", string.Join(" ", command.Select(x => string.Format("{0:X2} ", x)), Encoding.UTF8.GetString(command)));
 
             byte[] response = new byte[256];
             _sCardReader.Transmit(_protocol, command, ref response);
 
-            Log("Command response: {0}", string.Join(" ", response.Select(x => string.Format("{0:X2} ", x))));
+            Log("Command response in bytes: {0} in string {1}", string.Join(" ", response.Select(x => string.Format("{0:X2} ", x)), Encoding.UTF8.GetString(response)));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
